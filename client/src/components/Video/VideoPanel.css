@@ -1,0 +1,132 @@
+/* VideoPanel Styles */
+
+.video-panel-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-frame-wrapper {
+    flex: 1;
+    position: relative;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+/* Ensure Daily.co iframe is visible */
+.video-panel-container iframe {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 500px !important;
+}
+
+.video-empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+}
+
+.video-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    background: #2a2a2a;
+}
+
+.video-controls.light-mode {
+    background: #ffffff;
+}
+
+.control-button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.control-button:hover {
+    transform: scale(1.05);
+}
+
+.control-button.muted {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.control-button.active {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.leave-button {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.leave-button:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+}
+
+/* Participant overlay */
+.participant-count-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Joining state */
+.video-joining-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+}
+
+/* Preview dialog */
+.preview-video-container {
+    width: 100%;
+    height: 400px;
+    background: #000;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .video-controls {
+        padding: 8px;
+    }
+
+    .control-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .video-empty-state {
+        width: 90%;
+    }
+}

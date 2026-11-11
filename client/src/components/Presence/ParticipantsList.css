@@ -1,0 +1,143 @@
+/* ParticipantsList Styles */
+
+.participants-list-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.participants-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.participant-item {
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s;
+}
+
+.participant-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.participant-item.local {
+    background-color: rgba(33, 150, 243, 0.05);
+}
+
+.participant-avatar {
+    position: relative;
+}
+
+.participant-status-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4caf50;
+    border: 2px solid #1e1e1e;
+}
+
+.participant-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.participant-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.participant-name.local {
+    font-weight: 600;
+}
+
+.participant-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.status-icon.active {
+    color: #4caf50;
+}
+
+.status-icon.inactive {
+    color: #757575;
+}
+
+.role-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.role-badge.tutor {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+    border: 1px solid #2196f3;
+}
+
+.role-badge.moderator {
+    background: rgba(156, 39, 176, 0.1);
+    color: #9c27b0;
+    border: 1px solid #9c27b0;
+}
+
+.typing-indicator {
+    font-size: 11px;
+    font-style: italic;
+    color: #757575;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Empty state */
+.participants-empty {
+    text-align: center;
+    padding: 32px 16px;
+    color: #757575;
+}
+
+/* Compact mode */
+.participants-list-container.compact .participant-item {
+    padding: 6px 8px;
+}
+
+.participants-list-container.compact .participant-avatar {
+    width: 32px;
+    height: 32px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .participant-meta {
+        flex-wrap: wrap;
+    }
+}

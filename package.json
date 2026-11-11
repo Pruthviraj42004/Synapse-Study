@@ -1,0 +1,41 @@
+{
+  "name": "study-sphere-mern",
+  "version": "1.0.0",
+  "description": "A collaborative online learning platform built with MERN stack",
+  "main": "server/src/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "test": "concurrently \"cd client && npm test\" \"cd server && npm test\"",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "keywords": [
+    "education",
+    "collaboration",
+    "study-groups",
+    "mern",
+    "real-time",
+    "video-conferencing",
+    "whiteboard"
+  ],
+  "author": "StudySphere Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

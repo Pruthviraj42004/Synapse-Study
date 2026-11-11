@@ -1,0 +1,605 @@
+/**
+ * Study Sphere - Cyberpunk Brutalist Theme
+ * Non-invasive visual enhancement layer
+ * Safe to remove - no structural dependencies
+ */
+
+/* ========================================
+   CUSTOM FONTS - Crazy Aesthetic
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ========================================
+   CSS VARIABLES - Design Tokens
+   ======================================== */
+:root {
+  /* Cyberpunk Color Palette - Neon & Dark */
+  --color-cyber-pink: #00f0ff;
+  --color-cyber-blue: #7c3aed;
+  --color-cyber-purple: #bd00ff;
+  --color-cyber-green: #39ff14;
+  --color-cyber-yellow: #ffff00;
+  --color-cyber-orange: #ff6600;
+
+  /* Dark Base Colors */
+  --color-dark-base: #0a0a0f;
+  --color-dark-surface: #16161d;
+  --color-dark-elevated: #1f1f2e;
+  --color-dark-border: #2a2a3c;
+
+  /* Accent Colors */
+  --color-accent-primary: var(--color-cyber-pink);
+  --color-accent-secondary: var(--color-cyber-blue);
+  --color-accent-tertiary: var(--color-cyber-purple);
+
+  /* Semantic Colors */
+  --color-success: var(--color-cyber-green);
+  --color-warning: var(--color-cyber-yellow);
+  --color-error: var(--color-cyber-pink);
+  --color-info: var(--color-cyber-blue);
+
+  /* Typography Scale */
+  --font-primary: 'Outfit', 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-display: 'Space Grotesk', sans-serif;
+
+  /* Spacing Scale (8px base) */
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+  --space-3xl: 4rem;
+  /* 64px */
+
+  /* Border Radius - Brutalist Asymmetry */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+  --radius-asymmetric: 0 16px 0 16px;
+  --radius-brutal-1: 0 0 16px 0;
+  --radius-brutal-2: 16px 0 0 0;
+
+  /* Shadows - Neon Glow Effects */
+  --shadow-glow-pink: 0 0 20px rgba(255, 0, 128, 0.4), 0 0 40px rgba(255, 0, 128, 0.2);
+  --shadow-glow-blue: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(0, 240, 255, 0.2);
+  --shadow-glow-purple: 0 0 20px rgba(189, 0, 255, 0.4), 0 0 40px rgba(189, 0, 255, 0.2);
+  --shadow-glow-green: 0 0 20px rgba(57, 255, 20, 0.4), 0 0 40px rgba(57, 255, 20, 0.2);
+
+  --shadow-brutalist: 8px 8px 0 rgba(0, 0, 0, 0.8);
+  --shadow-brutalist-hover: 12px 12px 0 rgba(0, 0, 0, 0.8);
+  --shadow-inset: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* Animation Timing */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Z-index Scale */
+  --z-base: 1;
+  --z-elevated: 10;
+  --z-modal: 100;
+  --z-popover: 200;
+  --z-toast: 300;
+
+  /* Glass Morphism */
+  --glass-bg: rgba(22, 22, 29, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(12px);
+
+  /* Scanline Effect */
+  --scanline-color: rgba(0, 240, 255, 0.03);
+}
+
+/* ========================================
+   GLOBAL VISUAL ENHANCEMENTS
+   ======================================== */
+
+/* Optional: Add to body for full dark theme */
+.cyberpunk-theme {
+  background: var(--color-dark-base);
+  color: #ffffff;
+  font-family: var(--font-primary);
+  position: relative;
+}
+
+/* Scanline overlay effect (optional) */
+.cyberpunk-theme::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--z-elevated);
+  background: repeating-linear-gradient(0deg,
+      var(--scanline-color) 0px,
+      transparent 1px,
+      transparent 2px,
+      var(--scanline-color) 3px);
+  animation: scanline 8s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(100px);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Neon Glow Text */
+.glow-text-pink {
+  color: var(--color-cyber-pink);
+  text-shadow: 0 0 10px var(--color-cyber-pink),
+    0 0 20px var(--color-cyber-pink),
+    0 0 30px var(--color-cyber-pink);
+}
+
+.glow-text-blue {
+  color: var(--color-cyber-blue);
+  text-shadow: 0 0 10px var(--color-cyber-blue),
+    0 0 20px var(--color-cyber-blue),
+    0 0 30px var(--color-cyber-blue);
+}
+
+.glow-text-purple {
+  color: var(--color-cyber-purple);
+  text-shadow: 0 0 10px var(--color-cyber-purple),
+    0 0 20px var(--color-cyber-purple),
+    0 0 30px var(--color-cyber-purple);
+}
+
+/* Glass Morphism Card */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Brutalist Card */
+.brutalist-card {
+  background: var(--color-dark-surface);
+  border: 3px solid var(--color-cyber-pink);
+  box-shadow: var(--shadow-brutalist);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  border-radius: var(--radius-asymmetric);
+}
+
+.brutalist-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--shadow-brutalist-hover);
+}
+
+/* Neon Border Animation */
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-dark-surface), var(--color-dark-surface)) padding-box,
+    linear-gradient(45deg, var(--color-cyber-pink), var(--color-cyber-blue), var(--color-cyber-purple)) border-box;
+}
+
+.neon-border-animated {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--color-dark-surface), var(--color-dark-surface)) padding-box,
+    linear-gradient(45deg, var(--color-cyber-pink), var(--color-cyber-blue), var(--color-cyber-purple)) border-box;
+  background-size: 200% 200%;
+  animation: neon-rotate 3s linear infinite;
+}
+
+@keyframes neon-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glitch Effect */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: var(--color-cyber-pink);
+  z-index: -1;
+  animation: glitch-1 2s infinite;
+}
+
+.glitch::after {
+  color: var(--color-cyber-blue);
+  z-index: -2;
+  animation: glitch-2 2s infinite;
+}
+
+@keyframes glitch-1 {
+
+  0%,
+  100% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-2 {
+
+  0%,
+  100% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(2px, -2px);
+  }
+
+  40% {
+    transform: translate(2px, 2px);
+  }
+
+  60% {
+    transform: translate(-2px, -2px);
+  }
+
+  80% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+/* Cyber Grid Background */
+.cyber-grid {
+  background-image:
+    linear-gradient(var(--color-cyber-blue) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-cyber-blue) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+}
+
+/* Animated Gradient Background */
+.animated-gradient {
+  background: linear-gradient(45deg,
+      var(--color-dark-base),
+      var(--color-dark-surface),
+      var(--color-dark-elevated));
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Pulse Glow Animation */
+.pulse-glow {
+  animation: pulse-glow-anim 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow-anim {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px var(--color-cyber-pink);
+  }
+
+  50% {
+    box-shadow: 0 0 30px var(--color-cyber-pink), 0 0 50px var(--color-cyber-pink);
+  }
+}
+
+/* Holographic Effect */
+.holographic {
+  background: linear-gradient(135deg,
+      var(--color-cyber-pink) 0%,
+      var(--color-cyber-blue) 25%,
+      var(--color-cyber-purple) 50%,
+      var(--color-cyber-blue) 75%,
+      var(--color-cyber-pink) 100%);
+  background-size: 400% 400%;
+  animation: holographic-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes holographic-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ========================================
+   SPACING UTILITIES
+   ======================================== */
+.mt-xs {
+  margin-top: var(--space-xs) !important;
+}
+
+.mt-sm {
+  margin-top: var(--space-sm) !important;
+}
+
+.mt-md {
+  margin-top: var(--space-md) !important;
+}
+
+.mt-lg {
+  margin-top: var(--space-lg) !important;
+}
+
+.mt-xl {
+  margin-top: var(--space-xl) !important;
+}
+
+.mb-xs {
+  margin-bottom: var(--space-xs) !important;
+}
+
+.mb-sm {
+  margin-bottom: var(--space-sm) !important;
+}
+
+.mb-md {
+  margin-bottom: var(--space-md) !important;
+}
+
+.mb-lg {
+  margin-bottom: var(--space-lg) !important;
+}
+
+.mb-xl {
+  margin-bottom: var(--space-xl) !important;
+}
+
+.p-xs {
+  padding: var(--space-xs) !important;
+}
+
+.p-sm {
+  padding: var(--space-sm) !important;
+}
+
+.p-md {
+  padding: var(--space-md) !important;
+}
+
+.p-lg {
+  padding: var(--space-lg) !important;
+}
+
+.p-xl {
+  padding: var(--space-xl) !important;
+}
+
+/* ========================================
+   ENHANCED COMPONENT STYLES
+   ======================================== */
+
+/* Enhanced Glass Card */
+.glass-card-enhanced {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.08) 0%, rgba(156, 39, 176, 0.08) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-enhanced:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 240, 255, 0.1);
+}
+
+/* Gradient Button */
+.gradient-button {
+  background: linear-gradient(45deg, #1976d2 30%, #9c27b0 90%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+}
+
+.gradient-button:active {
+  transform: translateY(0);
+}
+
+/* Feature Card */
+.feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 240, 255, 0.3);
+  transform: translateY(-4px);
+}
+
+/* Tab Panel Enhanced */
+.tab-panel-enhanced {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  border-radius: 0 0 16px 16px;
+}
+
+/* Status Indicator */
+.status-online {
+  position: relative;
+}
+
+.status-online::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #00ff88;
+  border-radius: 50%;
+  border: 2px solid #1a1a1a;
+  box-shadow: 0 0 8px #00ff88;
+}
+
+/* Avatar with Gradient Border */
+.avatar-gradient {
+  padding: 2px;
+  background: linear-gradient(45deg, #00f0ff, #9c27b0);
+  border-radius: 50%;
+}
+
+/* Animated Underline */
+.animated-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00f0ff, #9c27b0);
+  transition: width 0.3s ease;
+}
+
+.animated-underline:hover::after {
+  width: 100%;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1976d2, #9c27b0);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #1565c0, #7b1fa2);
+}
+
+/* Selection Styling */
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: white;
+}
+
+/* Focus Visible Styling */
+*:focus-visible {
+  outline: 2px solid #00f0ff;
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions for All Interactive Elements */
+button,
+a,
+input,
+select,
+textarea {
+  transition: all 0.2s ease;
+}
+
+/* Input Enhancement */
+input,
+textarea,
+select {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1) !important;
+}

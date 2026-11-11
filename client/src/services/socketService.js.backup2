@@ -1,0 +1,492 @@
+import { io } from 'socket.io-client';
+
+let socket = null;
+// Track rooms we should be in across reconnects (sticky membership)
+const desiredRooms = new Set();
+
+export const initializeSocket = (userId, options = {}) => {
+  const { force = false } = options;
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No token found for socket connection');
+    return;
+  }
+
+  let currentSocket = getSocketInstance();
+
+  // Check if socket exists but token has changed (different user logged in)
+  if (currentSocket && currentSocket.io.opts.auth.token !== token) {
+    console.log('[SocketService] Token changed - forcing socket recreation for new user');
+    try { currentSocket.removeAllListeners(); } catch (_) { }
+    currentSocket.disconnect();
+    setSocketInstance(null);
+    setListenersBound(false);
+    currentSocket = null;
+  }
+
+  // If we already have a socket and not forcing, reuse it
+  if (currentSocket && !force) {
+    if (!currentSocket.connected) {
+      console.log('[SocketService] Existing socket found. Connecting...');
+      currentSocket.connect();
+    } else {
+      console.log('[SocketService] Socket already connected. Reusing instance:', currentSocket.id);
+    }
+    return currentSocket;
+  }
+
+  // If forcing and socket exists, cleanly disconnect before recreating
+  if (force && currentSocket) {
+    try { currentSocket.removeAllListeners(); } catch (_) { }
+    currentSocket.disconnect();
+    setSocketInstance(null);
+    setListenersBound(false);
+    currentSocket = null;
+  }
+
+  // Create single client instance or reconnect existing
+  if (!currentSocket) {
+    currentSocket = io(SOCKET_URL, {
+      auth: { token },
+      autoConnect: true,
+    });
+    setSocketInstance(currentSocket);
+  }
+
+  if (!getListenersBound()) {
+    setListenersBound(true);
+
+    currentSocket.on('connect', () => {
+      console.log('Connected to server with socket ID:', currentSocket.id);
+      // Re-join all desired rooms after any (re)connect
+      if (desiredRooms.size > 0) {
+        console.log('[SocketService] Rejoining desired rooms on connect:', Array.from(desiredRooms));
+        desiredRooms.forEach((roomId) => {
+          // Use the ack-capable joinRoom so we know it succeeded
+          joinRoom(roomId);
+        });
+      }
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+    });
+  }
+
+  return socket;
+};
+
+export const getSocket = () => {
+  return socket;
+};
+
+export const disconnectSocket = () => {
+  if (socket) {
+    socket.disconnect();
+    socket = null;
+  }
+};
+
+// Debug helper to check socket status
+export const getSocketStatus = () => {
+  return {
+    exists: !!socket,
+    connected: socket?.connected || false,
+    id: socket?.id || 'N/A'
+  };
+};
+
+// Room management
+export const joinRoom = (roomId) => {
+  // Remember that we want to be in this room across reconnects
+  desiredRooms.add(roomId);
+  if (socket && socket.connected) {
+    console.log('[SocketService] Joining room:', roomId);
+    let acked = false;
+    socket.emit('join_room', roomId, (res) => {
+      acked = true;
+      console.log('[SocketService] join_room ack:', res);
+    });
+    // Fallback retry if no ack within 1s
+    setTimeout(() => {
+      if (!acked && socket && socket.connected) {
+        console.warn('[SocketService] join_room not acked, retrying:', roomId);
+        socket.emit('join_room', roomId, (res) => {
+          console.log('[SocketService] join_room ack (retry):', res);
+        });
+      }
+    }, 1000);
+  } else if (socket) {
+    // If socket exists but not connected, wait for connection
+    console.log('[SocketService] Socket not connected yet, waiting...');
+    socket.once('connect', () => {
+      console.log('[SocketService] Connected! Now joining room:', roomId);
+      socket.emit('join_room', roomId, (res) => {
+        console.log('[SocketService] join_room ack (post-connect):', res);
+      });
+    });
+  } else {
+    console.error('[SocketService] Socket not initialized. Cannot join room:', roomId);
+  }
+};
+
+export const leaveRoom = (roomId) => {
+  if (socket) {
+    socket.emit('leave_room', roomId);
+  }
+};
+
+// Explicitly stop tracking a room and leave it (used when navigating away)
+export const untrackAndLeaveRoom = (roomId) => {
+  desiredRooms.delete(roomId);
+  leaveRoom(roomId);
+};
+
+// Message handling
+export const sendMessage = (roomId, message, type = 'text') => {
+  if (socket) {
+    socket.emit('send_message', { roomId, message, type });
+  }
+};
+
+export const onNewMessage = (callback) => {
+  if (socket) {
+    socket.on('new_message', callback);
+  }
+};
+
+export const offNewMessage = () => {
+  if (socket) {
+    socket.off('new_message');
+  }
+};
+
+// Typing indicators
+export const startTyping = (roomId) => {
+  if (socket) {
+    socket.emit('typing_start', { roomId });
+  }
+};
+
+export const stopTyping = (roomId) => {
+  if (socket) {
+    socket.emit('typing_stop', { roomId });
+  }
+};
+
+export const onUserTyping = (callback) => {
+  if (socket) {
+    socket.on('user_typing', callback);
+  }
+};
+
+export const onUserStoppedTyping = (callback) => {
+  if (socket) {
+    socket.on('user_stopped_typing', callback);
+  }
+};
+
+// Whiteboard events
+export const sendWhiteboardUpdate = (roomId, drawingData) => {
+  if (socket && socket.connected) {
+    console.log('[SocketService] Sending whiteboard update to room:', roomId, 'Socket connected:', socket.connected, 'Socket ID:', socket.id);
+    socket.emit('whiteboard_update', { roomId, drawingData });
+  } else {
+    console.error('[SocketService] Cannot send whiteboard update - socket not connected');
+  }
+};
+
+export const onWhiteboardUpdate = (callback) => {
+  if (socket) {
+    socket.on('whiteboard_update', callback);
+  }
+};
+
+export const offWhiteboardUpdate = () => {
+  if (socket) {
+    socket.off('whiteboard_update');
+  }
+};
+
+// Code collaboration events
+export const joinCodeSession = (sessionId) => {
+  if (socket) {
+    socket.emit('join_code_session', sessionId);
+  }
+};
+
+export const leaveCodeSession = (sessionId) => {
+  if (socket) {
+    socket.emit('leave_code_session', sessionId);
+  }
+};
+
+export const sendCodeUpdate = (sessionId, fileId, content, language, cursorPosition = null) => {
+  if (socket) {
+    socket.emit('code_update', {
+      sessionId,
+      fileId,
+      content,
+      language,
+      cursorPosition
+    });
+  }
+};
+
+export const executeCodeRequest = (sessionId, code, language) => {
+  if (socket) {
+    socket.emit('execute_code_request', { sessionId, code, language });
+  }
+};
+
+export const sendExecutionResult = (sessionId, result, error = null) => {
+  if (socket) {
+    socket.emit('execute_code_result', { sessionId, result, error });
+  }
+};
+
+export const onCodeUpdated = (callback) => {
+  if (socket) {
+    socket.on('code_updated', callback);
+  }
+};
+
+export const offCodeUpdated = () => {
+  if (socket) {
+    socket.off('code_updated');
+  }
+};
+
+export const onUserJoinedSession = (callback) => {
+  if (socket) {
+    socket.on('user_joined_session', callback);
+  }
+};
+
+export const onUserLeftSession = (callback) => {
+  if (socket) {
+    socket.on('user_left_session', callback);
+  }
+};
+
+export const onCodeExecutionStarted = (callback) => {
+  if (socket) {
+    socket.on('code_execution_started', callback);
+  }
+};
+
+export const onCodeExecutionCompleted = (callback) => {
+  if (socket) {
+    socket.on('code_execution_completed', callback);
+  }
+};
+
+// Cursor tracking
+export const sendCursorUpdate = (roomId, position) => {
+  if (socket) {
+    socket.emit('cursor_update', { roomId, position });
+  }
+};
+
+export const onCursorUpdate = (callback) => {
+  if (socket) {
+    socket.on('cursor_update', callback);
+  }
+};
+
+// User presence
+export const onUserJoined = (callback) => {
+  if (socket) {
+    socket.on('user_joined', callback);
+  }
+};
+
+export const onUserLeft = (callback) => {
+  if (socket) {
+    socket.on('user_left', callback);
+  }
+};
+
+export const onUserStatusChanged = (callback) => {
+  if (socket) {
+    socket.on('user_status_changed', callback);
+  }
+};
+
+// File sharing
+export const shareFile = (roomId, fileData) => {
+  if (socket) {
+    socket.emit('file_shared', { roomId, file: fileData });
+  }
+};
+
+export const deleteFile = (roomId, fileId, fileName) => {
+  if (socket) {
+    socket.emit('file_deleted', { roomId, fileId, fileName });
+  }
+};
+
+export const shareNote = (roomId, noteData) => {
+  if (socket) {
+    socket.emit('note_shared', { roomId, note: noteData });
+  }
+};
+
+export const updateNote = (roomId, noteData) => {
+  if (socket) {
+    socket.emit('note_updated', { roomId, note: noteData });
+  }
+};
+
+export const onNewFile = (callback) => {
+  if (socket) {
+    socket.on('file_shared', callback);
+  }
+};
+
+export const onFileDeleted = (callback) => {
+  if (socket) {
+    socket.on('file_deleted', callback);
+  }
+};
+
+export const onNoteShared = (callback) => {
+  if (socket) {
+    socket.on('note_shared', callback);
+  }
+};
+
+export const onNoteUpdated = (callback) => {
+  if (socket) {
+    socket.on('note_updated', callback);
+  }
+};
+
+// Video call events
+export const startVideoCall = (roomId) => {
+  if (socket) {
+    socket.emit('video_call_start', { roomId });
+  }
+};
+
+export const endVideoCall = (roomId) => {
+  if (socket) {
+    socket.emit('video_call_end', { roomId });
+  }
+};
+
+export const onVideoCallStarted = (callback) => {
+  if (socket) {
+    socket.on('video_call_started', callback);
+  }
+};
+
+export const onVideoCallEnded = (callback) => {
+  if (socket) {
+    socket.on('video_call_ended', callback);
+  }
+};
+
+// Screen sharing
+export const startScreenShare = (roomId) => {
+  if (socket) {
+    socket.emit('screen_share_start', { roomId });
+  }
+};
+
+export const stopScreenShare = (roomId) => {
+  if (socket) {
+    socket.emit('screen_share_stop', { roomId });
+  }
+};
+
+export const onScreenShareStarted = (callback) => {
+  if (socket) {
+    socket.on('screen_share_started', callback);
+  }
+};
+
+export const onScreenShareStopped = (callback) => {
+  if (socket) {
+    socket.on('screen_share_stopped', callback);
+  }
+};
+
+// Error handling
+export const onError = (callback) => {
+  if (socket) {
+    socket.on('error', callback);
+  }
+};
+
+// Clean up event listeners
+export const removeAllListeners = () => {
+  if (socket) {
+    socket.removeAllListeners();
+  }
+};
+
+const socketService = {
+  initializeSocket,
+  getSocket,
+  disconnectSocket,
+  joinRoom,
+  leaveRoom,
+  sendMessage,
+  onNewMessage,
+  offNewMessage,
+  startTyping,
+  stopTyping,
+  onUserTyping,
+  onUserStoppedTyping,
+  sendWhiteboardUpdate,
+  onWhiteboardUpdate,
+  offWhiteboardUpdate,
+  sendCursorUpdate,
+  onCursorUpdate,
+  onUserJoined,
+  onUserLeft,
+  onUserStatusChanged,
+  getSocketStatus,
+  shareFile,
+  deleteFile,
+  shareNote,
+  updateNote,
+  onNewFile,
+  onFileDeleted,
+  onNoteShared,
+  onNoteUpdated,
+  startVideoCall,
+  endVideoCall,
+  onVideoCallStarted,
+  onVideoCallEnded,
+  startScreenShare,
+  stopScreenShare,
+  onScreenShareStarted,
+  onScreenShareStopped,
+  // Code collaboration
+  joinCodeSession,
+  leaveCodeSession,
+  sendCodeUpdate,
+  executeCodeRequest,
+  sendExecutionResult,
+  onCodeUpdated,
+  offCodeUpdated,
+  onUserJoinedSession,
+  onUserLeftSession,
+  onCodeExecutionStarted,
+  onCodeExecutionCompleted,
+  // Error and event handling
+  onError,
+  removeAllListeners,
+  on: (event, callback) => socket?.on(event, callback),
+  off: (event) => socket?.off(event),
+  emit: (event, data) => socket?.emit(event, data)
+};
+
+export default socketService;

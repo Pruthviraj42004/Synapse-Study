@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  yjs-server:
+    build: .
+    container_name: study-sphere-yjs
+    ports:
+      - "1234:1234"
+    environment:
+      - NODE_ENV=production
+      - PORT=1234
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ENABLE_PERSISTENCE=true
+      - SNAPSHOT_INTERVAL=60000
+      - REQUIRE_AUTH=false
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5000
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - study-sphere
+
+  redis:
+    image: redis:7-alpine
+    container_name: study-sphere-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - study-sphere
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  study-sphere:
+    driver: bridge

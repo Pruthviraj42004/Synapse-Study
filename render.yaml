@@ -1,0 +1,71 @@
+# Render Blueprint for StudySphere
+# This file allows one-click deployment of all services
+# Deploy via: https://render.com/deploy?repo=https://github.com/Prathikvn06/majorprojectfinal
+
+services:
+  # Main API Server
+  - type: web
+    name: majorproject-server
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+  # Y.js Collaborative Editing Server (NEW)
+  - type: web
+    name: majorproject-yjs
+    env: node
+    plan: free
+    rootDir: y-server
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REQUIRE_AUTH
+        value: "false"
+      - key: ENABLE_PERSISTENCE
+        value: "false"
+
+  # React Frontend (Static Site)
+  - type: web
+    name: majorproject-client
+    env: static
+    plan: free
+    rootDir: client
+    buildCommand: npm ci && npm run build
+    staticPublishPath: build
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# =============================================================================
+# IMPORTANT: After deployment, set these environment variables in Render Dashboard:
+# =============================================================================
+#
+# For majorproject-server:
+#   - MONGODB_URI: Your MongoDB connection string
+#   - JWT_SECRET: Your JWT secret key
+#   - CLIENT_URL: https://majorproject-client.onrender.com
+#   - LIVEKIT_API_KEY: Your LiveKit API key
+#   - LIVEKIT_API_SECRET: Your LiveKit API secret
+#   - LIVEKIT_URL: wss://your-livekit-server.livekit.cloud
+#
+# For majorproject-client:
+#   - REACT_APP_API_URL: https://majorproject-server.onrender.com/api
+#   - REACT_APP_YJS_SERVER_URL: wss://majorproject-yjs.onrender.com
+#   - REACT_APP_USE_CODEMIRROR: true
+#   - REACT_APP_LIVEKIT_URL: wss://your-livekit-server.livekit.cloud
+#
+# For majorproject-yjs (optional):
+#   - JWT_SECRET: Same as server (only if REQUIRE_AUTH=true)
+#   - REDIS_URL: Redis connection (only if ENABLE_PERSISTENCE=true)
+# =============================================================================

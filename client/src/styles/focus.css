@@ -1,0 +1,152 @@
+/**
+ * Accessible Focus Styles
+ * Enhanced keyboard navigation with neon cyberpunk styling
+ */
+
+/* ========================================
+   FOCUS OUTLINE STYLES
+   ======================================== */
+
+/* Hide default outline, replace with custom */
+*:focus {
+  outline: none;
+}
+
+/* Custom focus ring for interactive elements */
+*:focus-visible {
+  outline: 2px solid var(--color-cyber-blue, #00f0ff);
+  outline-offset: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--color-cyber-pink, #ff0080);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(255, 0, 128, 0.2);
+  animation: focus-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes focus-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 5px rgba(255, 0, 128, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 0, 128, 0.3);
+  }
+}
+
+/* Input field focus */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-cyber-blue, #00f0ff);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.15),
+              0 0 20px rgba(0, 240, 255, 0.3);
+}
+
+/* Card/Container focus */
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-cyber-purple, #bd00ff);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(189, 0, 255, 0.15);
+}
+
+/* Skip link focus (accessibility) */
+.skip-link:focus-visible {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: var(--color-cyber-pink, #ff0080);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 9999;
+  outline: 3px solid white;
+  outline-offset: 2px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+}
+
+/* ========================================
+   FOCUS UTILITIES
+   ======================================== */
+
+/* Disable focus styles (use sparingly, ensure alternative indication) */
+.focus-none:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Enhanced focus for primary actions */
+.focus-primary:focus-visible {
+  outline: 3px solid var(--color-cyber-pink, #ff0080);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(255, 0, 128, 0.2),
+              0 0 30px rgba(255, 0, 128, 0.4);
+}
+
+/* Subtle focus for secondary actions */
+.focus-secondary:focus-visible {
+  outline: 2px solid var(--color-cyber-blue, #00f0ff);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.15);
+}
+
+/* Focus within - highlight parent when child is focused */
+.focus-within:focus-within {
+  border-color: var(--color-cyber-blue, #00f0ff);
+  box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.15);
+}
+
+/* ========================================
+   HIGH CONTRAST MODE SUPPORT
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 4px;
+    outline-offset: 4px;
+  }
+  
+  button:focus-visible,
+  a:focus-visible {
+    outline-width: 5px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *:focus-visible {
+    animation: none;
+    transition: none;
+  }
+  
+  button:focus-visible,
+  a:focus-visible {
+    animation: none;
+  }
+}
+
+/* ========================================
+   KEYBOARD NAVIGATION HELPERS
+   ======================================== */
+
+/* Show focus when navigating with keyboard only */
+body:not(.user-is-tabbing) *:focus {
+  outline: none;
+}
+
+/* Add this class with JS when Tab is pressed */
+.user-is-tabbing *:focus-visible {
+  outline: 3px solid var(--color-cyber-pink, #ff0080) !important;
+  outline-offset: 3px !important;
+}

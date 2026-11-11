@@ -1,0 +1,500 @@
+/**
+ * Enhanced Animations and Effects
+ * Modern UI animations for Study Sphere
+ */
+
+/* ========================================
+   GRADIENT ANIMATIONS
+   ======================================== */
+
+@keyframes gradient-flow {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes gradient-rotate {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animated-gradient-bg {
+    background: linear-gradient(-45deg,
+            #667eea,
+            #764ba2,
+            #f093fb,
+            #4facfe);
+    background-size: 400% 400%;
+    animation: gradient-flow 15s ease infinite;
+}
+
+.animated-gradient-text {
+    background: linear-gradient(135deg,
+            #00f0ff 0%,
+            #7c3aed 25%,
+            #bd00ff 50%,
+            #00f0ff 100%);
+    background-size: 200% 200%;
+    animation: gradient-rotate 3s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+/* ========================================
+   FLOATING ANIMATIONS
+   ======================================== */
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes float-slow {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+}
+
+/* ========================================
+   GLOW EFFECTS
+   ======================================== */
+
+@keyframes glow-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4),
+            0 0 40px rgba(0, 240, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.6),
+            0 0 80px rgba(0, 240, 255, 0.4);
+    }
+}
+
+@keyframes glow-pulse-pink {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(255, 0, 128, 0.4),
+            0 0 40px rgba(255, 0, 128, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(255, 0, 128, 0.6),
+            0 0 80px rgba(255, 0, 128, 0.4);
+    }
+}
+
+@keyframes glow-pulse-purple {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(189, 0, 255, 0.4),
+            0 0 40px rgba(189, 0, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(189, 0, 255, 0.6),
+            0 0 80px rgba(189, 0, 255, 0.4);
+    }
+}
+
+.glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.glow-pulse-pink {
+    animation: glow-pulse-pink 2s ease-in-out infinite;
+}
+
+.glow-pulse-purple {
+    animation: glow-pulse-purple 2s ease-in-out infinite;
+}
+
+/* ========================================
+   FADE IN ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.fade-in-down {
+    animation: fadeInDown 0.8s ease-out;
+}
+
+/* Staggered animations */
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+.stagger-6 {
+    animation-delay: 0.6s;
+}
+
+/* ========================================
+   SCALE ANIMATIONS
+   ======================================== */
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes scale-pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.scale-in {
+    animation: scale-in 0.5s ease-out;
+}
+
+.scale-pulse {
+    animation: scale-pulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+   ROTATE ANIMATIONS
+   ======================================== */
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.rotate {
+    animation: rotate 3s linear infinite;
+}
+
+.rotate-slow {
+    animation: rotate-slow 20s linear infinite;
+}
+
+/* ========================================
+   SHIMMER EFFECT
+   ======================================== */
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ========================================
+   NEON BORDER ANIMATION
+   ======================================== */
+
+@keyframes neon-border-flow {
+
+    0%,
+    100% {
+        border-color: #00f0ff;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+
+    33% {
+        border-color: #7c3aed;
+        box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+    }
+
+    66% {
+        border-color: #bd00ff;
+        box-shadow: 0 0 20px rgba(189, 0, 255, 0.5);
+    }
+}
+
+.neon-border-animated {
+    border: 2px solid #00f0ff;
+    animation: neon-border-flow 3s ease-in-out infinite;
+}
+
+/* ========================================
+   PARTICLE / DOT EFFECTS
+   ======================================== */
+
+@keyframes particle-float-1 {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(100px, -50px);
+    }
+
+    50% {
+        transform: translate(200px, 0);
+    }
+
+    75% {
+        transform: translate(100px, 50px);
+    }
+}
+
+@keyframes particle-float-2 {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-50px, 100px);
+    }
+
+    50% {
+        transform: translate(0, 200px);
+    }
+
+    75% {
+        transform: translate(50px, 100px);
+    }
+}
+
+.particle-1 {
+    animation: particle-float-1 20s ease-in-out infinite;
+}
+
+.particle-2 {
+    animation: particle-float-2 25s ease-in-out infinite;
+}
+
+/* ========================================
+   HOVER EFFECTS
+   ======================================== */
+
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.6),
+        0 0 60px rgba(0, 240, 255, 0.4);
+}
+
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* ========================================
+   GLASS MORPHISM ENHANCED
+   ======================================== */
+
+.glass-card-enhanced {
+    background: rgba(22, 22, 29, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.glass-card-enhanced:hover {
+    background: rgba(22, 22, 29, 0.7);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(0, 240, 255, 0.2);
+}
+
+/* ========================================
+   TEXT EFFECTS
+   ======================================== */
+
+.text-glow {
+    text-shadow: 0 0 10px currentColor,
+        0 0 20px currentColor,
+        0 0 30px currentColor;
+}
+
+.text-gradient-cyber {
+    background: linear-gradient(135deg, #00f0ff, #7c3aed, #bd00ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.opacity-100 {
+    opacity: 1;
+}
+
+/* ========================================
+   BACKGROUND PATTERNS
+   ======================================== */
+
+.cyber-grid-bg {
+    background-image:
+        linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+.dots-bg {
+    background-image: radial-gradient(rgba(0, 240, 255, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+}

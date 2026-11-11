@@ -1,0 +1,159 @@
+# Allow client public folder
+!client/public/
+!client/public/**
+# SynapseStudy MERN
+
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Logs
+logs
+*.log
+
+# Editor directories and files
+.vscode/
+.idea
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build outputs
+build/
+dist/
+client/build/
+
+# Production
+/build
+
+# Database
+*.db
+*.sqlite
+
+# Uploads
+uploads/
+
+# Documentation and test files (exclude from repo)
+*_FEATURE_DOCS.md
+*_FEATURE_SUMMARY.md
+*_FEATURE_TEST_PLAN.md
+*_FEATURE.md
+*_FIX.md
+*_FIXES.md
+*_INSTRUCTIONS.md
+*_RESOLUTION_SUMMARY.md
+*_SOLUTION.md
+*_FIX_SUMMARY.md
+*_INTEGRATION_PROMPT.md
+*_STATUS.md
+BROWSER_*.md
+CORS_*.md
+DEBUG_*.md
+IMPLEMENTATION_*.md
+PROGRAMMING_*.md
+FINAL_*.md
+PROJECT_STATUS.md
+COLLEGE_FEATURE_DOCS.md
+COLLEGE_FEATURE_SUMMARY.md
+COLLEGE_FEATURE_TEST_PLAN.md
+COLLEGE_FEATURE.md
+CORS_FIX.md
+DEBUG_FIXES.md
+FRONTEND_TEST_PLAN.md
+LOGIN_INSTRUCTIONS.md
+LOGIN_RESOLUTION_SUMMARY.md
+LOGIN_SOLUTION.md
+PORT_FIX_SUMMARY.md
+PROGRAMMING_IN_STUDYROOM_FEATURE.md
+RIPLE_INTEGRATION_PROMPT.md
+USER_STATISTICS_FEATURE.md
+
+# Test and mock files
+mock-server.js
+test-*.js
+create-test-user.js
+server/create-test-user.js
+server/test-*.js
+
+# Test directories
+testsprite_tests/
+tests/
+
+# Other directories to exclude
+SynapseStudy/
+
+# Development scripts
+start-dev.sh
